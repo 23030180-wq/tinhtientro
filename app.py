@@ -83,52 +83,36 @@ for i in range(1, so_phong + 1):
 
     with st.expander(f"🏠 Phòng {i}", expanded=False):
 
-        c1, c2 = st.columns(2)
+c1, c2, c3, c4 = st.columns(4)
 
-        with c1:
-            ten = st.text_input(
-                "Tên người thuê",
-                key=f"ten{i}"
-            )
+with c1:
+    dien_cu = st.number_input(
+        "Điện cũ",
+        min_value=0,
+        key=f"dc{i}"
+    )
 
-            sdt = st.text_input(
-                "SĐT",
-                key=f"sdt{i}"
-            )
+with c2:
+    dien_moi = st.number_input(
+        "Điện mới",
+        min_value=0,
+        key=f"dm{i}"
+    )
 
-            songuoi = st.number_input(
-                "Số người",
-                min_value=1,
-                value=1,
-                key=f"nguoi{i}"
-            )
+with c3:
+    nuoc_cu = st.number_input(
+        "Nước cũ",
+        min_value=0,
+        key=f"nc{i}"
+    )
 
-        with c2:
-
-            dien_cu = st.number_input(
-                "Điện cũ",
-                min_value=0,
-                key=f"dc{i}"
-            )
-
-            dien_moi = st.number_input(
-                "Điện mới",
-                min_value=0,
-                key=f"dm{i}"
-            )
-
-            nuoc_cu = st.number_input(
-                "Nước cũ",
-                min_value=0,
-                key=f"nc{i}"
-            )
-
-            nuoc_moi = st.number_input(
-                "Nước mới",
-                min_value=0,
-                key=f"nm{i}"
-            )
-
+with c4:
+    nuoc_moi = st.number_input(
+        "Nước mới",
+        min_value=0,
+        key=f"nm{i}"
+    )
+    
         if dien_moi < dien_cu:
             st.error("❌ Chỉ số điện mới phải lớn hơn hoặc bằng điện cũ.")
 
@@ -155,22 +139,19 @@ for i in range(1, so_phong + 1):
         tong_dien += so_dien
         tong_nuoc += so_nuoc
 
-        ket_qua.append({
-            "Phòng": i,
-            "Người thuê": ten,
-            "SĐT": sdt,
-            "Số người": songuoi,
-            "Điện tiêu thụ": so_dien,
-            "Nước tiêu thụ": so_nuoc,
-            "Tiền điện": tien_dien,
-            "Tiền nước": tien_nuoc,
-            "Tiền phòng": gia_phong,
-            "Internet": internet,
-            "Rác": rac,
-            "Xe": gui_xe,
-            "Phụ phí": phu_phi,
-            "Tổng tiền": tong
-        })
+       ket_qua.append({
+    "Phòng": i,
+    "Điện tiêu thụ": so_dien,
+    "Nước tiêu thụ": so_nuoc,
+    "Tiền điện": tien_dien,
+    "Tiền nước": tien_nuoc,
+    "Tiền phòng": gia_phong,
+    "Internet": internet,
+    "Rác": rac,
+    "Xe": gui_xe,
+    "Phụ phí": phu_phi,
+    "Tổng tiền": tong
+})
 
 st.divider()
 
