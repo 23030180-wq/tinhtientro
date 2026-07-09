@@ -17,7 +17,7 @@ st.title("🏠 HỆ THỐNG QUẢN LÝ TIỀN DÃY PHÒNG TRỌ")
 # SIDEBAR
 # ======================================
 
-st.sidebar.header("⚙️ CẤU HÌNH")
+st.sidebar.header("⚙️ Cấu hình")
 
 gia_dien = st.sidebar.number_input(
     "⚡ Giá điện (VNĐ/số)",
@@ -49,7 +49,7 @@ so_phong = st.sidebar.slider(
 
 st.divider()
 
-st.header("📋 NHẬP CHỈ SỐ TỪNG PHÒNG")
+st.header("📋 NHẬP DỮ LIỆU CÁC PHÒNG")
 
 ket_qua = []
 tong_doanh_thu = 0
@@ -58,39 +58,48 @@ for i in range(1, so_phong + 1):
 
     st.subheader(f"🏠 Phòng {i}")
 
-    c1, c2, c3, c4, c5 = st.columns(5)
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
 
     with c1:
-        gia_phong = st.number_input(
-            "Giá phòng",
+        gia_phong_cu = st.number_input(
+            "Giá phòng cũ",
             min_value=0,
             value=2500000,
             step=50000,
-            key=f"gp{i}"
+            key=f"gpc{i}"
         )
 
     with c2:
+        gia_phong_moi = st.number_input(
+            "Giá phòng mới",
+            min_value=0,
+            value=2500000,
+            step=50000,
+            key=f"gpm{i}"
+        )
+
+    with c3:
         dien_cu = st.number_input(
             "Điện cũ",
             min_value=0,
             key=f"dc{i}"
         )
 
-    with c3:
+    with c4:
         dien_moi = st.number_input(
             "Điện mới",
             min_value=0,
             key=f"dm{i}"
         )
 
-    with c4:
+    with c5:
         nuoc_cu = st.number_input(
             "Nước cũ",
             min_value=0,
             key=f"nc{i}"
         )
 
-    with c5:
+    with c6:
         nuoc_moi = st.number_input(
             "Nước mới",
             min_value=0,
@@ -98,7 +107,6 @@ for i in range(1, so_phong + 1):
         )
 
     # Kiểm tra dữ liệu
-
     if dien_moi < dien_cu:
         st.warning(f"⚠️ Phòng {i}: Điện mới phải lớn hơn hoặc bằng điện cũ.")
 
@@ -111,8 +119,9 @@ for i in range(1, so_phong + 1):
     tien_dien = so_dien * gia_dien
     tien_nuoc = so_nuoc * gia_nuoc
 
+    # Tính theo giá phòng mới
     tong_tien = (
-        gia_phong
+        gia_phong_moi
         + tien_dien
         + tien_nuoc
         + phi_khac
@@ -122,15 +131,16 @@ for i in range(1, so_phong + 1):
 
     ket_qua.append({
         "Phòng": i,
-        "Giá phòng": f"{gia_phong:,.0f}",
+        "Giá phòng cũ": gia_phong_cu,
+        "Giá phòng mới": gia_phong_moi,
         "Điện cũ": dien_cu,
         "Điện mới": dien_moi,
-        "Tiền điện": f"{tien_dien:,.0f}",
+        "Tiền điện": tien_dien,
         "Nước cũ": nuoc_cu,
         "Nước mới": nuoc_moi,
-        "Tiền nước": f"{tien_nuoc:,.0f}",
-        "Phí khác": f"{phi_khac:,.0f}",
-        "Tổng tiền": f"{tong_tien:,.0f}"
+        "Tiền nước": tien_nuoc,
+        "Phí khác": phi_khac,
+        "Tổng tiền": tong_tien
     })
 
 st.divider()
@@ -139,8 +149,21 @@ st.header("📊 BẢNG TÍNH TIỀN")
 
 df = pd.DataFrame(ket_qua)
 
+# Định dạng hiển thị
+df_hien_thi = df.copy()
+
+for cot in [
+    "Giá phòng cũ",
+    "Giá phòng mới",
+    "Tiền điện",
+    "Tiền nước",
+    "Phí khác",
+    "Tổng tiền"
+]:
+    df_hien_thi[cot] = df_hien_thi[cot].map(lambda x: f"{x:,.0f}")
+
 st.dataframe(
-    df,
+    df_hien_thi,
     use_container_width=True,
     hide_index=True
 )
@@ -157,8 +180,10 @@ st.divider()
 csv = df.to_csv(index=False).encode("utf-8-sig")
 
 st.download_button(
-    "📥 Xuất file CSV",
+    label="📥 Xuất file CSV",
     data=csv,
     file_name="BangTinhTienPhong.csv",
     mime="text/csv"
 )
+
+st.success("✅ Đã tính tiền thành công.")
