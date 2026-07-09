@@ -19,12 +19,44 @@ st.title("🏠 HỆ THỐNG TÍNH TIỀN DÃY PHÒNG TRỌ")
 
 st.sidebar.header("⚙️ Cấu hình")
 
-gia_phong = st.sidebar.number_input(
-    "Tiền phòng (VNĐ)",
-    min_value=0,
-    value=2500000,
-    step=50000
-)
+c1, c2, c3, c4, c5 = st.columns(5)
+
+with c1:
+    gia_phong = st.number_input(
+        "Giá phòng",
+        min_value=0,
+        value=2500000,
+        step=50000,
+        key=f"gp{i}"
+    )
+
+with c2:
+    dien_cu = st.number_input(
+        "Điện cũ",
+        min_value=0,
+        key=f"dc{i}"
+    )
+
+with c3:
+    dien_moi = st.number_input(
+        "Điện mới",
+        min_value=0,
+        key=f"dm{i}"
+    )
+
+with c4:
+    nuoc_cu = st.number_input(
+        "Nước cũ",
+        min_value=0,
+        key=f"nc{i}"
+    )
+
+with c5:
+    nuoc_moi = st.number_input(
+        "Nước mới",
+        min_value=0,
+        key=f"nm{i}"
+    )
 
 gia_dien = st.sidebar.number_input(
     "Giá điện (VNĐ/số)",
@@ -119,16 +151,17 @@ for i in range(1, so_phong + 1):
     tong_doanh_thu += tong_tien
 
     ket_qua.append({
-        "Phòng": i,
-        "Điện cũ": dien_cu,
-        "Điện mới": dien_moi,
-        "Tiền điện": tien_dien,
-        "Nước cũ": nuoc_cu,
-        "Nước mới": nuoc_moi,
-        "Tiền nước": tien_nuoc,
-        "Phí khác": phi_khac,
-        "Tổng tiền": tong_tien
-    })
+    "Phòng": i,
+    "Giá phòng": gia_phong,
+    "Điện cũ": dien_cu,
+    "Điện mới": dien_moi,
+    "Tiền điện": tien_dien,
+    "Nước cũ": nuoc_cu,
+    "Nước mới": nuoc_moi,
+    "Tiền nước": tien_nuoc,
+    "Phí khác": phi_khac,
+    "Tổng tiền": tong_tien
+})
 
 st.divider()
 
